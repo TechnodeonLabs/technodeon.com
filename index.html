@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Technodeon</title>
+    <style>
+        :root {
+            --primary: #6200EA;
+            --secondary: #03DAC6;
+            --dark: #121212;
+            --light: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(98, 0, 234, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(98, 0, 234, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% {
+                transform: translateZ(0) translateY(0);
+            }
+            100% {
+                transform: translateZ(0) translateY(40px);
+            }
+        }
+        
+        .container {
+            max-width: 900px;
+            text-align: center;
+            padding: 60px 40px;
+            background-color: rgba(18, 18, 18, 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .slogan {
+            font-size: 24px;
+            margin-bottom: 40px;
+            color: var(--secondary);
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            font-size: 64px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        p {
+            font-size: 18px;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .contact-us {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .contact-us h3 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--secondary);
+        }
+        
+        .contact-us p {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .contact-email {
+            font-size: 24px;
+            color: var(--secondary);
+            text-decoration: none;
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(3, 218, 198, 0.1);
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .contact-email:hover {
+            background: rgba(3, 218, 198, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(3, 218, 198, 0.2);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-username {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .social-link:hover .social-icon {
+            background: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-5px);
+        }
+        
+        .social-link:hover .social-username {
+            color: var(--secondary);
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 40px 20px;
+            }
+            
+            h1 {
+                font-size: 40px;
+            }
+            
+            .contact-email {
+                font-size: 20px;
+                padding: 10px 18px;
+            }
+            
+            .social-links {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .social-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <div class="container">
+        <div class="logo">Techno<span>deon</span></div>
+        <div class="slogan">Dream. Develop. Deliver.</div>
+        
+        <h1>Coming Soon</h1>
+        
+        <p>We're working hard to bring you something amazing. Our new website is under construction. Stay tuned for our official launch where we'll showcase how we can help transform your ideas into reality.</p>
+        
+        <div class="contact-us">
+            <h3>Contact Us</h3>
+            <p>Have questions or want to learn more about our services?</p>
+            <p>Reach out to us directly:</p>
+            <a href="mailto:info@technodeon.com" class="contact-email">info@technodeon.com</a>
+        </div>
+        
+        <div class="social-links">
+            <a href="https://facebook.com/Technodeon" class="social-link" target="_blank">
+                <div class="social-icon">f</div>
+                <div class="social-username">Technodeon</div>
+            </a>
+            <a href="https://linkedin.com/company/Technodeon" class="social-link" target="_blank">
+                <div class="social-icon">in</div>
+                <div class="social-username">Technodeon</div>
+            </a>
+            <a href="https://youtube.com/Technodeon" class="social-link" target="_blank">
+                <div class="social-icon">yt</div>
+                <div class="social-username">Technodeon</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
