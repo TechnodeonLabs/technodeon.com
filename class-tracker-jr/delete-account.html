@@ -6,142 +6,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Tracker Jr - Account Deletion</title>
     <style>
+        :root {
+            --primary: #4a6bdf;
+            --primary-light: #eef2ff;
+            --secondary: #34d399;
+            --accent: #ffb74d;
+            --dark: #2d3748;
+            --light: #f8fafc;
+            --danger: #f87171;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            color: #333;
+            padding: 25px;
+            color: var(--dark);
+            background-color: #fafafa;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
         .logo {
             width: 120px;
             height: 120px;
-            background-color: #4285f4;
-            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 15px;
             color: white;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 28px;
+            box-shadow: 0 10px 15px -3px rgba(74, 107, 223, 0.2);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 2px dashed var(--primary-light);
+            border-radius: 28px;
+            z-index: -1;
         }
 
         h1 {
-            color: #4285f4;
+            color: var(--primary);
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .tagline {
+            color: #718096;
+            font-size: 18px;
+            margin-top: 0;
         }
 
         .container {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .steps {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .step {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #4285f4;
+            background-color: var(--primary-light);
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .step h3 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-size: 16px;
+            font-weight: bold;
         }
 
         .note {
             background-color: #fff8e6;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border-left: 4px solid #ffbb33;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-            color: #666;
+        .note::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--accent);
+        }
+
+        .note h3 {
+            color: #d97706;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .note-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: #fef3c7;
+            color: #d97706;
+            border-radius: 50%;
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        ol,
+        ul {
+            padding-left: 20px;
+        }
+
+        ol li,
+        ul li {
+            margin-bottom: 10px;
         }
 
         .btn {
             display: inline-block;
-            background-color: #4285f4;
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
             color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(74, 107, 223, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(74, 107, 223, 0.3);
         }
 
         .contact-info {
-            margin-top: 30px;
+            margin-top: 40px;
+            background-color: #f1f5f9;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #718096;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            .step,
+            .note {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
     <header>
-        <div class="logo">CTJ</div>
+        <div class="logo-container">
+            <div class="logo">CTJ</div>
+        </div>
         <h1>Class Tracker Jr</h1>
-        <p>Account Deletion Instructions</p>
+        <p class="tagline">Account Deletion Portal</p>
     </header>
 
     <div class="container">
         <h2>How to Delete Your Account</h2>
-        <p>At Technodeon, we respect your data privacy rights. If you wish to delete your Class Tracker Jr account and
-            all associated personal data, please follow the instructions below:</p>
+        <p>At Technodeon, we respect your data privacy rights and make account deletion simple and straightforward. If
+            you wish to delete your Class Tracker Jr account and associated data, follow the instructions below.</p>
 
         <div class="steps">
             <div class="step">
-                <h3>Account Deletion via Email</h3>
-                <p>To request the deletion of your account:</p>
-                <ol>
-                    <li>Send an email to <strong>support@technodeon.com</strong></li>
-                    <li>Use the subject line: "Account Deletion Request - Class Tracker Jr"</li>
-                    <li>Include your account email address in the email body</li>
-                    <li>We will process your request within 5 business days</li>
-                    <li>You will receive a confirmation email once your account has been deleted</li>
-                </ol>
+                <h3><span class="step-number">1</span> Send Deletion Request</h3>
+                <p>To request the deletion of your account, send an email with the following details:</p>
+                <ul>
+                    <li><strong>To:</strong> support@technodeon.com</li>
+                    <li><strong>Subject:</strong> Account Deletion Request - Class Tracker Jr</li>
+                    <li><strong>Body:</strong> Please include the email address associated with your account</li>
+                </ul>
                 <a href="mailto:support@technodeon.com?subject=Account%20Deletion%20Request%20-%20Class%20Tracker%20Jr"
-                    class="btn">Email Support</a>
+                    class="btn">Send Deletion Request</a>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span> Verification Process</h3>
+                <p>Our team will verify your account ownership and begin the deletion process. You may receive a
+                    verification email to confirm your identity before proceeding.</p>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span> Confirmation</h3>
+                <p>Once your account has been successfully deleted, you will receive a confirmation email. This
+                    typically happens within 48 hours of your request.</p>
             </div>
         </div>
 
         <div class="note">
-            <h3>Important Information</h3>
-            <p>Please note the following regarding account deletion:</p>
+            <h3><span class="note-icon">!</span> Important Information</h3>
+            <p>Please be aware of the following regarding account deletion:</p>
             <ul>
-                <li>Account deletion is permanent and cannot be undone</li>
-                <li>All your personal data will be permanently removed from our servers</li>
-                <li>Any saved class information, schedules, or notes will be lost</li>
-                <li>Account deletion requests are typically processed within 24-48 hours</li>
+                <li>Account deletion is <strong>permanent</strong> and cannot be undone</li>
+                <li>All your personal data will be completely removed from our systems</li>
+                <li>Your class information, schedules, and notes will no longer be accessible</li>
+                <li>Your user profile and preferences will be permanently deleted</li>
             </ul>
         </div>
 
         <div class="contact-info">
-            <h3>Need Help?</h3>
-            <p>If you encounter any issues deleting your account or have questions about our data practices, please
-                contact our support team:</p>
-            <ul>
-                <li>Email: support@technodeon.com</li>
-                <li>Response Time: Within 2 business days</li>
-            </ul>
+            <h3>Need Assistance?</h3>
+            <p>Our support team is here to help with any questions about account deletion:</p>
+
+            <div class="contact-row">
+                <div class="contact-icon">✉</div>
+                <div>
+                    <strong>Email:</strong> support@technodeon.com
+                </div>
+            </div>
+
+            <div class="contact-row">
+                <div class="contact-icon">⏱</div>
+                <div>
+                    <strong>Response Time:</strong> Within 2 business days
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
         <p>© 2025 Technodeon. All rights reserved.</p>
-        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
     </footer>
 </body>
 
