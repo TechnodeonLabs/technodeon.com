@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Tracker Jr - Smart Class Management</title>
+    <style>
+        :root {
+            --primary: #4a6bdf;
+            --primary-light: #eef2ff;
+            --secondary: #34d399;
+            --accent: #ffb74d;
+            --dark: #2d3748;
+            --light: #f8fafc;
+            --danger: #f87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background-color: #fafafa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            height: 90px;
+            margin-right: 15px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(74, 107, 223, 0.8), rgba(106, 139, 255, 0.8)), url('https://api.placeholder.com/1600/900') center/cover;
+            color: white;
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h3 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .section-title p {
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            background: var(--primary-light);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 30px;
+            color: var(--primary);
+        }
+
+        .feature-card h4 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* Screenshots Section */
+        .screenshots {
+            padding: 100px 0;
+            background-color: var(--primary-light);
+        }
+
+        .screenshots-container {
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .screenshots-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding: 20px 0;
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .screenshots-slider::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        .screenshot-item {
+            flex: 0 0 280px;
+            scroll-snap-align: center;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-item:hover {
+            transform: scale(1.03);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            border: 10px solid white;
+            border-radius: 20px;
+        }
+
+        .screenshot-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 120px 0;
+            background-color: white;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            flex: 0 0 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: 700;
+            margin-right: 30px;
+            box-shadow: 0 10px 20px rgba(74, 107, 223, 0.2);
+        }
+
+        .step-content h4 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--primary-light);
+        }
+
+        .testimonials-container {
+            max-width: 900px;
+            margin: 60px auto 0;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .testimonial-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .author-info h5 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .author-info p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 120px 0;
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
+            color: white;
+            text-align: center;
+        }
+
+        .download h3 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .download p {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn i {
+            font-size: 30px;
+            margin-right: 15px;
+        }
+
+        .btn-text span {
+            display: block;
+        }
+
+        .btn-text .small-text {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .btn-text .big-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-column h4 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e0;
+            font-size: 14px;
+        }
+
+        .technodeon {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-container {
+                margin-bottom: 15px;
+            }
+
+            nav ul {
+                margin-top: 15px;
+            }
+
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .hero {
+                padding: 140px 0 80px;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .steps-container {
+                padding: 0 20px;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin: 0 auto 20px;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .section-title h3 {
+                font-size: 28px;
+            }
+
+            .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo-container">
+                <img src="/images/ctj/logo.jpeg" alt="Class Tracker Jr Logo" class="logo">
+                <div class="logo-text">
+                    <h1>Class Tracker Jr</h1>
+                    <p>Smart class management</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#download">Download</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Your Smart Companion for Daily Class Management</h2>
+            <p>Designed for students, tutors, and educators, Class Tracker Jr helps you stay organized and on top of
+                your class routines.</p>
+            <div class="cta-buttons">
+                <a href="#download" class="btn btn-primary">Download Now</a>
+                <a href="#features" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h3>Powerful Features</h3>
+                <p>Everything you need to simplify your day-to-day class management</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h4>Subject & Class Creation</h4>
+                    <p>Create subjects, then link them with teachers to define classes with complete flexibility.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Routine Scheduling</h4>
+                    <p>Assign classes to specific days and times with set durations in a clear weekly routine.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-square"></i>
+                    </div>
+                    <h4>Attendance Tracking</h4>
+                    <p>Easily mark classes as Present, Absent, or Canceled to maintain accurate records.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Dashboard Overview</h4>
+                    <p>Get a quick glance at total classes, attendance stats, and daily reports right on the home
+                        screen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <div class="section-title">
+                <h3>App Screenshots</h3>
+                <p>See Class Tracker Jr in action</p>
+            </div>
+            <div class="screenshots-container">
+                <div class="screenshots-slider">
+                    <!-- 10 Screenshot slots -->
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss1.jpeg" alt="Dashboard Overview">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss2.jpeg" alt="Class Creation">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss3.jpeg" alt="Weekly Schedule">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss4.jpeg" alt="Attendance Tracking">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss5.jpeg" alt="Subject Management">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss6.jpeg" alt="Reports View">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss7.jpeg" alt="Daily Schedule">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss8.jpeg" alt="Teacher Management">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss9.jpeg" alt="Statistics View">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss10.jpeg" alt="Settings">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss11.jpeg" alt="Settings">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss12.jpeg" alt="Settings">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="/images/ctj/ss13.jpeg" alt="Settings">
+                    </div>
+                </div>
+                <div class="screenshot-controls">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h3>How It Works</h3>
+                <p>Get started with Class Tracker Jr in just three easy steps</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Create Your Subjects</h4>
+                        <p>Start by adding your subjects and associating them with teachers to create class definitions
+                            that match your educational environment.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Set Up Your Schedule</h4>
+                        <p>Build your weekly routine by adding classes on specific days with customized time slots.
+                            Create a schedule that fits your needs perfectly.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Track Your Progress</h4>
+                        <p>Mark attendance for each class and view comprehensive statistics to stay on top of your
+                            educational journey with detailed insights.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h3>What Our Users Say</h3>
+                <p>Hear from students, educators, and tutors who use Class Tracker Jr every day</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Class Tracker Jr has completely transformed how I manage my college schedule. The dashboard
+                        gives me instant insights into my attendance patterns, and the simple interface makes tracking
+                        multiple classes a breeze."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://api.placeholder.com/60/60" alt="Student" class="author-avatar">
+                        <div class="author-info">
+                            <h5>Alex Morgan</h5>
+                            <p>University Student</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "As an educator managing multiple batches of students, Class Tracker Jr has been invaluable. The
+                        ability to quickly mark attendance and generate reports has saved me hours of administrative
+                        work each week."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://api.placeholder.com/60/60" alt="Teacher" class="author-avatar">
+                        <div class="author-info">
+                            <h5>Sarah Johnson</h5>
+                            <p>High School Teacher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <h3>Download Class Tracker Jr Today</h3>
+            <p>Whether you're managing your own study schedule or organizing multiple classes, Class Tracker Jr makes
+                class tracking effortless and efficient.</p>
+            <div class="download-buttons">
+                <a href="https://play.google.com/store/apps/details?id=com.technodeon.classtrackerjr"
+                    class="download-btn">
+                    <i class="fab fa-google-play"></i>
+                    <div class="btn-text">
+                        <span class="small-text">GET IT ON</span>
+                        <span class="big-text">Google Play</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>Class Tracker Jr</h4>
+                    <p>Your smart companion for daily class management. Dream. Develop. Deliver.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#screenshots">Screenshots</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#download">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="./privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="./terms-of-service.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><i class="far fa-envelope"></i><a href="mailto:info@technodeon.com"> info@technodeon.com</a></li>
+                        <li><i class="fas fa-globe"></i><a href="https://technodeon.com"> technodeon.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Class Tracker Jr. All rights reserved. Powered by <span
+                        class="technodeon">Technodeon</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Simple slider script
+        document.addEventListener('DOMContentLoaded', function () {
+            const dots = document.querySelectorAll('.dot');
+            const slider = document.querySelector('.screenshots-slider');
+            const items = document.querySelectorAll('.screenshot-item');
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    // Update active dot
+                    document.querySelector('.dot.active').classList.remove('active');
+                    dot.classList.add('active');
+
+                    // Scroll to the selected item
+                    const itemWidth = items[0].offsetWidth + 20; // item width + gap
+                    slider.scrollTo({
+                        left: itemWidth * index,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Update dots when scrolling
+            slider.addEventListener('scroll', () => {
+                const scrollPosition = slider.scrollLeft;
+                const itemWidth = items[0].offsetWidth + 20; // item width + gap
+                const activeIndex = Math.round(scrollPosition / itemWidth);
+
+                document.querySelector('.dot.active').classList.remove('active');
+                dots[activeIndex].classList.add('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Adjust for header height
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
