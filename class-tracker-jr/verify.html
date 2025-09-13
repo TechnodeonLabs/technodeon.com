@@ -266,6 +266,11 @@
             const urlParams = new URLSearchParams(window.location.search);
             const hashParams = new URLSearchParams(window.location.hash.substring(1));
 
+            // Debug logging
+            console.log('🔍 Full URL:', window.location.href);
+            console.log('🔍 Search params:', window.location.search);
+            console.log('🔍 Hash params:', window.location.hash);
+
             // Combine both query and hash parameters
             const params = {};
             for (const [key, value] of urlParams) {
@@ -275,6 +280,7 @@
                 params[key] = value;
             }
 
+            console.log('🔍 Combined params:', params);
             return params;
         }
 
@@ -284,23 +290,89 @@
                 const params = getUrlParams();
                 console.log('🔄 Processing verification with params:', params);
 
-                // Check if we have the necessary tokens
-                if (!params.access_token || !params.refresh_token) {
-                    throw new Error('Missing authentication tokens');
+                // Check if we have tokens from URL fragments (Supabase redirect)
+                if (params.access_token && params.refresh_token) {
+                    console.log('✅ Found access/refresh tokens in URL, setting session...');
+
+                    // Set the session in Supabase
+                    const { data, error } = await supabase.auth.setSession({
+                        access_token: params.access_token,
+                        refresh_token: params.refresh_token,
+                    });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    console.log('✅ Email verification successful:', data);
+                    showSuccess();
+                    return;
                 }
 
-                // Set the session in Supabase
-                const { data, error } = await supabase.auth.setSession({
-                    access_token: params.access_token,
-                    refresh_token: params.refresh_token,
-                });
+                // Check if we have a verification token (custom URL)
+                if (params.token && params.type === 'signup') {
+                    console.log('✅ Found verification token, verifying with Supabase...');
+                    console.log('🔍 Token:', params.token);
+                    console.log('🔍 Email:', params.email);
 
-                if (error) {
-                    throw error;
+                    // Try different verification methods
+                    try {
+                        // Method 1: Use the token as OTP token
+                        const { data, error } = await supabase.auth.verifyOtp({
+                            token: params.token,
+                            type: 'signup',
+                            email: decodeURIComponent(params.email || '')
+                        });
+
+                        if (error) {
+                            console.log('🔄 Method 1 failed, trying method 2...');
+
+                            // Method 2: Use token_hash instead
+                            const { data: data2, error: error2 } = await supabase.auth.verifyOtp({
+                                token_hash: params.token,
+                                type: 'signup'
+                            });
+
+                            if (error2) {
+                                throw error2;
+                            }
+
+                            console.log('✅ Email verification successful (method 2):', data2);
+                            showSuccess();
+                            return;
+                        }
+
+                        console.log('✅ Email verification successful (method 1):', data);
+                        showSuccess();
+                        return;
+
+                    } catch (verifyError) {
+                        console.error('❌ All token verification methods failed:', verifyError);
+                        throw verifyError;
+                    }
                 }
 
-                console.log('✅ Email verification successful:', data);
-                showSuccess();
+                // Check if we have error parameters
+                if (params.error || params.error_description) {
+                    throw new Error(params.error_description || params.error || 'Verification failed');
+                }
+
+                // If no tokens, try to get session from Supabase (in case user is already logged in)
+                console.log('🔄 No tokens found, checking existing session...');
+                const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+                if (sessionError) {
+                    throw sessionError;
+                }
+
+                if (sessionData.session) {
+                    console.log('✅ User already has valid session');
+                    showSuccess();
+                    return;
+                }
+
+                // If we get here, something went wrong
+                throw new Error(`No authentication data found. URL params: ${Object.keys(params).join(', ')}`);
 
             } catch (error) {
                 console.error('❌ Verification error:', error);
@@ -370,6 +442,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Add a small delay to show the loading state
             setTimeout(handleEmailVerification, 1000);
+        });
+
+        // Also handle the case where Supabase redirects with tokens in the URL fragment
+        // This is a backup in case the initial load doesn't work
+        window.addEventListener('hashchange', () => {
+            console.log('🔄 Hash changed, re-checking verification...');
+            handleEmailVerification();
         });
     </script>
 </body>
