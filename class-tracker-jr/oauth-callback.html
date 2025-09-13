@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In - Class Tracker Jr</title>
+    <style>
+        :root {
+            --primary: #4a6bdf;
+            --primary-light: #eef2ff;
+            --secondary: #34d399;
+            --accent: #ffb74d;
+            --dark: #2d3748;
+            --light: #f8fafc;
+            --danger: #f87171;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background: linear-gradient(135deg, var(--primary), #6a8bff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .oauth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--primary);
+        }
+
+        .oauth-container h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .oauth-container p {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status-loading {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: var(--success);
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .spinner {
+            border: 3px solid var(--primary-light);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5bd0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .mobile-redirect {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .mobile-redirect h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .countdown {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .oauth-container {
+                padding: 30px 20px;
+            }
+
+            .oauth-container h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="oauth-container">
+        <div class="logo">
+            <i class="fab fa-google"></i>
+        </div>
+
+        <h1>Google Sign-In Complete</h1>
+        <p>Processing your authentication...</p>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="status-message status-loading">
+            <div class="spinner"></div>
+            <div>Completing sign-in process...</div>
+        </div>
+
+        <!-- Success State -->
+        <div id="success-state" class="hidden">
+            <div class="status-message status-success">
+                <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+                Successfully signed in with Google!
+            </div>
+            <div class="mobile-redirect">
+                <h3><i class="fas fa-mobile-alt"></i> Opening Class Tracker Jr...</h3>
+                <p>Redirecting you to the app in <span class="countdown" id="countdown">3</span> seconds</p>
+            </div>
+            <button id="open-app-btn" class="btn btn-primary">
+                <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>
+                Open App Now
+            </button>
+            <a href="https://play.google.com/store/apps/details?id=com.technodeon.ClassTrackerJr"
+                class="btn btn-secondary">
+                <i class="fab fa-google-play" style="margin-right: 8px;"></i>
+                Download App
+            </a>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="hidden">
+            <div class="status-message status-error">
+                <i class="fas fa-exclamation-circle" style="margin-right: 10px;"></i>
+                <span id="error-message">Authentication failed. Please try again.</span>
+            </div>
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home" style="margin-right: 8px;"></i>
+                Back to Home
+            </a>
+            <a href="mailto:info@technodeon.com" class="btn btn-secondary">
+                <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+                Contact Support
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Mobile detection
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Get URL parameters
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+            // Debug logging
+            console.log('🔍 Full URL:', window.location.href);
+            console.log('🔍 Search params:', window.location.search);
+            console.log('🔍 Hash params:', window.location.hash);
+
+            // Combine both query and hash parameters
+            const params = {};
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            for (const [key, value] of hashParams) {
+                params[key] = value;
+            }
+
+            console.log('🔍 Combined params:', params);
+            return params;
+        }
+
+        // Handle OAuth callback
+        function handleOAuthCallback() {
+            try {
+                const params = getUrlParams();
+                console.log('🔄 Processing OAuth callback with params:', params);
+
+                // Check if we have access_token and refresh_token from URL fragments (Supabase redirect)
+                if (params.access_token && params.refresh_token) {
+                    console.log('✅ Found OAuth tokens, preparing app redirect...');
+                    showSuccess();
+                    return;
+                }
+
+                // Check if we have error parameters
+                if (params.error || params.error_description) {
+                    throw new Error(params.error_description || params.error || 'OAuth authentication failed');
+                }
+
+                // If no tokens found, something went wrong
+                throw new Error(`No authentication data found. Available params: ${Object.keys(params).join(', ')}`);
+
+            } catch (error) {
+                console.error('❌ OAuth callback error:', error);
+                showError(error.message);
+            }
+        }
+
+        // Show success state
+        function showSuccess() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('success-state').classList.remove('hidden');
+            startAppRedirect();
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').textContent = message;
+        }
+
+        // Start app redirect countdown and functionality
+        function startAppRedirect() {
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdown');
+            const openAppBtn = document.getElementById('open-app-btn');
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    openApp();
+                }
+            }, 1000);
+
+            // Allow manual app opening
+            openAppBtn.addEventListener('click', () => {
+                clearInterval(countdownInterval);
+                openApp();
+            });
+        }
+
+        // Open mobile app with OAuth tokens
+        function openApp() {
+            const params = getUrlParams();
+            
+            // Construct deep link with all OAuth parameters
+            const deepLinkParams = new URLSearchParams({
+                access_token: params.access_token || '',
+                refresh_token: params.refresh_token || '',
+                expires_at: params.expires_at || '',
+                expires_in: params.expires_in || '',
+                provider_token: params.provider_token || '',
+                provider_refresh_token: params.provider_refresh_token || '',
+                token_type: params.token_type || 'bearer'
+            });
+
+            const deepLink = `classtrackerjr://auth/callback?${deepLinkParams.toString()}`;
+            
+            console.log('🔗 Opening app with deep link:', deepLink);
+
+            // Try to open the app
+            window.location.href = deepLink;
+
+            // Fallback: show manual options after a delay
+            setTimeout(() => {
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-radius: 10px;">
+                        <p style="color: #64748b; margin-bottom: 10px;">
+                            <strong>App didn't open automatically?</strong>
+                        </p>
+                        <a href="${deepLink}" style="color: var(--primary); font-weight: 600; text-decoration: underline;">
+                            👆 Click here to open Class Tracker Jr
+                        </a>
+                        <p style="color: #64748b; font-size: 14px; margin-top: 10px;">
+                            If you don't have the app installed, download it from the Play Store above.
+                        </p>
+                    </div>
+                `;
+                document.getElementById('success-state').appendChild(fallbackDiv);
+            }, 3000);
+        }
+
+        // Initialize OAuth callback processing on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add a small delay to show the loading state
+            setTimeout(handleOAuthCallback, 1000);
+        });
+
+        // Also handle the case where Supabase redirects with tokens in the URL fragment
+        // This is a backup in case the initial load doesn't work
+        window.addEventListener('hashchange', () => {
+            console.log('🔄 Hash changed, re-checking OAuth callback...');
+            handleOAuthCallback();
+        });
+    </script>
+</body>
+
+</html>
