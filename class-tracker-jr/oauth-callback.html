@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MZY75S04GP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-MZY75S04GP');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sign-In - Class Tracker Jr</title>
@@ -330,7 +339,7 @@
         // Open mobile app with OAuth tokens
         function openApp() {
             const params = getUrlParams();
-            
+
             // Construct deep link with all OAuth parameters
             const deepLinkParams = new URLSearchParams({
                 access_token: params.access_token || '',
@@ -343,7 +352,7 @@
             });
 
             const deepLink = `classtrackerjr://auth/callback?${deepLinkParams.toString()}`;
-            
+
             console.log('🔗 Opening app with deep link:', deepLink);
 
             // Try to open the app
